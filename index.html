@@ -67,8 +67,8 @@
   .vipg .numbox { font-style: normal; display: inline-block; min-width: 2.6em; text-align: center; background: rgba(255,255,255,.1);
                   border: 1px solid rgba(255,255,255,.25); border-radius: 6px; padding: 0 .3em; font-weight: 900; }
   /* 見出し（表示ページと同じ：小さく1行・右にいまつないでいるアカウント） */
-  .colhead { display: flex; align-items: center; gap: 10px; background: var(--panel); border-radius: 12px; padding: 8px 12px; font-weight: 800; font-size: 15px; }
-  .colhead .acct { font-size: 13px; color: var(--sub); background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; }
+  .colhead { display: flex; align-items: center; gap: 10px; white-space: nowrap; overflow: hidden; background: var(--panel); border-radius: 12px; padding: 8px 12px; font-weight: 800; font-size: 15px; }
+  .colhead .acct { flex: none; font-size: 13px; color: var(--sub); background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; }
   .colhead .acct::before { content: "●"; color: #ff4f4f; margin-right: 5px; }
   .tabsay { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-top: 10px; }
   .tabsay div { background: var(--panel); border-radius: 12px; padding: 10px 12px; font-weight: 700; font-size: 14px; }
@@ -186,7 +186,7 @@
   @media (max-width: 720px) {
     .cmp { grid-template-columns: 1fr; } .cmp .arrow2 { transform: rotate(90deg); justify-self: center; }
     .hrow { grid-template-columns: 1fr; gap: 2px; }
-    .tabsbar button { font-size: 15px; }
+    .tabsbar button { font-size: 14px; padding: 10px 6px; white-space: nowrap; }
   }
 </style>
 </head>
@@ -194,7 +194,7 @@
 <div class="wrap">
   <h1>Live Board ルール・お知らせ<small>アイドル・MC・スタッフ用｜いつでもここで最新のルールが見られます</small></h1>
   <div class="tabsbar">
-    <button data-p="rules">① いまのルール</button>
+    <button data-p="rules">① ルール</button>
     <button data-p="updates">② 最近の更新<span class="dot"></span></button>
   </div>
   <div class="panel" id="rules">
@@ -236,7 +236,7 @@
   <!-- 2. 上のボタン -->
   <section>
     <h2><span class="no">2</span>上のボタン</h2>
-    <div class="colhead" style="margin-bottom:10px">👋 入場・フォロー表示 <span class="acct">@1tb.cross</span></div>
+    <div class="colhead" style="margin-bottom:10px"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">👋 入場・フォロー表示</span> <span class="acct">@1tb.cross</span></div>
     <p class="note" style="margin:0 4px 10px">見出しの右＝いまつないでいるアカウント（● 赤＝配信中、黄＝配信待ち）</p>
     <div class="tabs"><span class="tab on">全部 <b>18</b></span><span class="tab">＋ 未フォロー <b>12</b></span>
       <span class="vipg"><span>重点 <b>5</b></span><span>Lv <i class="numbox">20</i>+</span></span></div>
