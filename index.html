@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Board ルール・お知らせ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&family=Noto+Sans+JP:wght@400;700;900&display=swap">
+<style>
+  /* レイアウト：本物の表示ページの行をそのまま見せて、横に一言ずつ書き込む「画面の早見表」 */
+  :root {
+    --bg: #0d0d14; --panel: #171724; --row: #1d1d2c; --line: #2a2a3d; --text: #f4f4fa; --sub: #9a9ab3;
+    --join: #3ee0c4; --follow: #ff4f8b; --gift: #ffc145; --plus: #f7d26b; --gold: #ffc93c; --mark: #fff36b;
+    --f-disp: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Noto Sans JP", sans-serif;
+    --f-body: "Noto Sans JP", "Hiragino Sans", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--f-body); margin: 0; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 28px 16px 48px; display: grid; gap: 34px; }
+  h1 { font-family: var(--f-disp); font-weight: 800; font-size: clamp(26px, 5vw, 40px); margin: 0; text-wrap: balance; }
+  h1 small { display: block; font-family: var(--f-body); font-weight: 400; font-size: 14px; color: var(--sub); margin-top: 6px; }
+  h2 { font-family: var(--f-disp); font-weight: 800; font-size: 20px; margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+  h2 .no { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--text); color: var(--bg); font-size: 16px; flex: none; }
+  .note { color: var(--sub); margin: 10px 4px 0; font-size: 13px; }
+
+  /* --- 名簿の行（本物と同じ形） --- */
+  .screen { background: var(--panel); border-radius: 18px; padding: 12px; display: grid; gap: 8px; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 14px; align-items: center; }
+  .item { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 12px; background: var(--row); min-width: 0; }
+  .item.call { background: rgba(255,200,40,.16); box-shadow: 0 0 0 2px var(--gold); }
+  .fstate { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; }
+  .fbtn { width: 42px; height: 42px; border-radius: 9px; display: grid; place-items: center; font-weight: 900; font-size: 24px; line-height: 1; }
+  .fbtn.plus { background: var(--plus); color: #1b1400; }
+  .fbtn.check { border: 2px solid #6b6b80; color: #b8b8c8; }
+  .visit { font-size: 12px; font-weight: 700; color: var(--sub); white-space: nowrap; }
+  .visit.first { color: var(--gift); }
+  .av { position: relative; flex: none; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; font-size: 30px;
+        background: linear-gradient(135deg, #3a3a55, #24243a); }
+  .lv { display: inline-block; background: #000; color: #fff; font-family: var(--f-disp); font-weight: 800; font-size: 13px;
+        padding: 1px 8px; border-radius: 5px; line-height: 1.35; white-space: nowrap; }
+  .lv.t2 { box-shadow: inset 0 0 0 2px #fff; } .lv.t3 { box-shadow: inset 0 0 0 4px #fff; }
+  .av .lv { position: absolute; left: 50%; bottom: -8px; transform: translateX(-50%); box-shadow: 0 2px 6px rgba(0,0,0,.5); }
+  .av .lv.t2 { box-shadow: inset 0 0 0 2px #fff, 0 2px 6px rgba(0,0,0,.5); }
+  .who { min-width: 0; flex: 1; display: grid; gap: 3px; }
+  .nm { font-weight: 900; font-size: 24px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act { color: var(--join); font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .fan { display: inline-block; background: var(--follow); color: #fff; font-family: var(--f-disp); font-weight: 800; font-size: 13px;
+         padding: 1px 8px; border-radius: 5px; line-height: 1.35; }
+
+  /* --- 書き込み --- */
+  .say { font-family: var(--f-disp); font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 6px; line-height: 1.35; }
+  .say::before { content: "←"; color: var(--sub); flex: none; }
+  .say.hot { color: var(--mark); }
+  .star { background: var(--mark); color: #1b1400; font-size: 11px; padding: 2px 7px; border-radius: 99px; flex: none; }
+
+  /* --- 上のタブ --- */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .tab { background: rgba(255,255,255,.06); border: 1px solid var(--line); color: var(--sub); border-radius: 99px; padding: 5px 13px; font-weight: 700; font-size: 14px; }
+  .tab b { color: var(--text); margin-left: 4px; }
+  .tab.on { background: var(--text); color: var(--bg); } .tab.on b { color: var(--bg); }
+  .vipg { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; background: rgba(255,255,255,.06); }
+  .vipg span { padding: 5px 11px; font-weight: 700; font-size: 14px; color: var(--sub); }
+  .vipg span b { color: var(--text); margin-left: 4px; }
+  .vipg span + span { border-left: 1px solid var(--line); color: var(--text); }
+  .tabsay { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-top: 10px; }
+  .tabsay div { background: var(--panel); border-radius: 12px; padding: 10px 12px; font-weight: 700; font-size: 14px; }
+  .tabsay b { font-family: var(--f-disp); }
+
+  /* --- フォロー欄の流れ --- */
+  .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: center; }
+  .step { background: var(--panel); border-radius: 14px; padding: 12px; display: grid; gap: 8px; justify-items: center; text-align: center; font-weight: 700; font-size: 14px; }
+  .arrow { font-size: 26px; color: var(--follow); font-weight: 900; }
+  .mini { display: flex; align-items: center; gap: 8px; background: var(--row); border-radius: 10px; padding: 6px 10px; width: 100%; justify-content: center; font-weight: 900; }
+  .mini .av { width: 34px; height: 34px; font-size: 18px; }
+  .mini .nm { font-size: 16px; }
+  .mini.pink { background: rgba(255,79,139,.16); box-shadow: 0 0 0 2px var(--follow); }
+  .mini.big { background: linear-gradient(135deg, #ff2d78, #ff5fa8); color: #fff; padding: 12px 10px; font-family: var(--f-disp); font-size: 17px; }
+
+  /* --- ポップアップ --- */
+  .pops { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .pop { border-radius: 20px; padding: 18px 14px; text-align: center; display: grid; gap: 8px; justify-items: center; color: #fff; }
+  .pop.follow { background: linear-gradient(135deg, #ff2d78, #ff5fa8); }
+  .pop.box { background: linear-gradient(135deg, #ffd23f, #ffa200); color: #3a1d00; }
+  .pop.lvup { background: linear-gradient(135deg, #5b3df5, #2f8bff); }
+  .pop .pav { position: relative; width: 74px; height: 74px; border-radius: 50%; background: #f3d6e2; border: 4px solid #fff; display: grid; place-items: center; font-size: 38px; }
+  .pop .pav i { position: absolute; right: -8px; bottom: -6px; font-style: normal; width: 32px; height: 32px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 17px; box-shadow: 0 3px 10px rgba(0,0,0,.3); }
+  .pop .pn { font-family: var(--f-disp); font-weight: 800; font-size: 24px; }
+  .pop .pact { font-family: var(--f-disp); font-weight: 800; font-size: 20px; background: #fff; border-radius: 12px; padding: 3px 14px; }
+  .pop.follow .pact { color: #ff2d78; } .pop.box .pact { color: #3a1d00; }
+  .pop .up { display: flex; align-items: center; gap: 6px; font-family: var(--f-disp); font-weight: 800; font-size: 26px; }
+  .pop .up i { font-style: normal; width: 30px; height: 30px; border-radius: 50%; background: #fff; color: #3f63ff; display: grid; place-items: center; font-size: 15px; }
+  .pop .what { font-family: var(--f-disp); font-weight: 800; font-size: 15px; background: rgba(0,0,0,.2); border-radius: 99px; padding: 3px 12px; }
+  .pop.box .what { background: rgba(58,29,0,.12); }
+
+  /* --- バッジ --- */
+  .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+  .chip { background: var(--panel); border-radius: 14px; padding: 14px; display: grid; gap: 8px; justify-items: start; }
+  .chip b { font-family: var(--f-disp); font-size: 15px; }
+  .chip .lv, .chip .fan { font-size: 17px; }
+
+  /* --- MC の操作・注意 --- */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .opc { background: var(--panel); border-radius: 16px; padding: 16px; display: grid; gap: 10px; align-content: start; }
+  .opc .big { font-size: 32px; } .opc b { font-family: var(--f-disp); font-size: 17px; }
+  .key { display: inline-block; font-family: var(--f-disp); font-weight: 800; border: 1.5px solid var(--sub); border-bottom-width: 3px; border-radius: 7px; padding: 0 8px; margin: 0 2px; }
+  .btn { display: inline-block; font-weight: 900; border-radius: 10px; padding: 6px 14px; font-size: 14px; background: var(--follow); color: #fff; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-weight: 900; border-radius: 99px; padding: 5px 12px; font-size: 13px; color: #fff; }
+  .pill.live { background: #1f8f4e; } .pill.wait { background: #3a3a55; } .pill.err { background: #b3261e; }
+  .ng { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+  .ng div { border: 2px dashed #ff6b6b; border-radius: 14px; padding: 12px 14px; font-weight: 700; display: flex; gap: 10px; align-items: center; }
+  .ng div span { font-size: 26px; }
+
+  /* いちばん上：これだけ覚える */
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .three .t { border-radius: 18px; padding: 18px 14px; display: grid; justify-items: center; gap: 6px; text-align: center; }
+  .three .ic { width: 58px; height: 58px; border-radius: 16px; display: grid; place-items: center; font-size: 32px; font-weight: 900; }
+  .three b { font-family: var(--f-disp); font-size: 19px; }
+  .three span:last-child { font-family: var(--f-disp); font-weight: 800; font-size: 22px; }
+  .three .gold { background: rgba(255,200,40,.16); box-shadow: 0 0 0 2px var(--gold); }
+  .three .gold .ic { background: rgba(255,200,40,.25); }
+  .three .plus { background: var(--panel); box-shadow: 0 0 0 2px var(--plus); }
+  .three .plus .ic { background: var(--plus); color: #1b1400; }
+  .three .pink { background: linear-gradient(135deg, #ff2d78, #ff5fa8); }
+  .three .pink .ic { background: #fff; }
+  @media (max-width: 720px) {
+    .three { grid-template-columns: 1fr; }
+    .row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .say::before { content: "↑"; }
+    .flow { grid-template-columns: 1fr; } .arrow { transform: rotate(90deg); justify-self: center; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .say.hot .star { animation: blink 1.4s ease-in-out infinite; }
+    @keyframes blink { 50% { opacity: .45; } }
+  }
+</style>
+
+<style>
+  /* タブ */
+  .tabsbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; display: flex; gap: 8px; }
+  .tabsbar button { flex: 1; font-family: var(--f-disp); font-weight: 800; font-size: 17px; padding: 12px 10px; border-radius: 14px;
+                    border: 1px solid var(--line); background: var(--panel); color: var(--sub); cursor: pointer; }
+  .tabsbar button.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .tabsbar button .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--mark); margin-left: 6px; vertical-align: middle; }
+  .panel { display: grid; gap: 34px; }
+  .panel[hidden] { display: none !important; }
+  /* 最新の変更：前といま */
+  .latest { background: var(--panel); border-radius: 18px; padding: 16px; display: grid; gap: 14px; }
+  .latest .ver { font-family: var(--f-disp); font-weight: 800; color: var(--sub); font-size: 14px; }
+  .latest .ver b { color: var(--mark); margin-right: 8px; }
+  .cmp { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; align-items: center; }
+  .cmp .side { display: grid; gap: 6px; min-width: 0; }
+  .cmp .tag { justify-self: start; font-family: var(--f-disp); font-weight: 800; font-size: 13px; padding: 2px 10px; border-radius: 99px; }
+  .cmp .before .tag { background: rgba(255,255,255,.12); color: var(--sub); }
+  .cmp .after .tag { background: var(--mark); color: #1b1400; }
+  .cmp .arrow2 { font-size: 28px; color: var(--mark); font-weight: 900; }
+  .cmp .cap { color: var(--sub); font-size: 13px; font-weight: 700; }
+  .cmp h4 { margin: 0; font-family: var(--f-disp); font-size: 16px; grid-column: 1 / -1; }
+  .old { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--row); box-shadow: inset 5px 0 0 var(--join); min-width: 0; }
+  .old .av { width: 46px; height: 46px; font-size: 22px; }
+  .old .nm2 { font-weight: 900; font-size: 20px; }
+  .old .lvc { display: inline-block; background: #2f6fd6; color: #fff; border-radius: 99px; padding: 0 8px; font-weight: 800; font-size: 12px; }
+  .old .fcc { display: inline-block; background: rgba(255,94,58,.22); border: 1px solid #ff5e3a; color: #ffb39e; border-radius: 99px; padding: 0 8px; font-weight: 800; font-size: 12px; }
+  .old .tg { margin-left: auto; display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+  .old .tg span { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+  .old .t-n { background: var(--join); color: #04231d; } .old .t-f { background: var(--gift); color: #1b1400; }
+  .points { margin: 0; padding-left: 1.2em; font-weight: 700; line-height: 1.7; }
+  .hist { background: var(--panel); border-radius: 16px; padding: 6px 14px; display: grid; }
+  .hrow { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .hrow:last-child { border-bottom: 0; }
+  .hrow .nv { font-family: var(--f-disp); font-weight: 800; color: var(--sub); font-size: 13px; }
+  .hrow .nv b { display: block; color: var(--text); font-size: 15px; }
+  .hrow ul { margin: 0; padding-left: 1.2em; font-size: 14px; line-height: 1.6; }
+  /* 文字だけのせつめい */
+  .textver { background: var(--panel); border-radius: 16px; padding: 16px 18px; font-size: 15px; line-height: 1.8; }
+  .textver h3 { margin: 14px 0 4px; font-family: var(--f-disp); font-size: 16px; }
+  .textver h3:first-child { margin-top: 0; }
+  .textver ul { margin: 0; padding-left: 1.2em; }
+  @media (max-width: 720px) {
+    .cmp { grid-template-columns: 1fr; } .cmp .arrow2 { transform: rotate(90deg); justify-self: center; }
+    .hrow { grid-template-columns: 1fr; gap: 2px; }
+    .tabsbar button { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Live Board ルール・お知らせ<small>アイドル・MC・スタッフ用｜いつでもここで最新のルールが見られます</small></h1>
+  <div class="tabsbar">
+    <button data-p="rules">① いまのルール</button>
+    <button data-p="updates">② 最近の更新<span class="dot"></span></button>
+  </div>
+  <div class="panel" id="rules">
+  <!-- 0. これだけ覚える -->
+  <section>
+    <div class="three">
+      <div class="t gold"><span class="ic">🌟</span><b>金色の行</b><span>いますぐ名前を呼ぶ</span></div>
+      <div class="t plus"><span class="ic">＋</span><b>黄色の ＋</b><span>フォローをお願い</span></div>
+      <div class="t pink"><span class="ic">💖</span><b>ピンクのポップアップ</b><span>すぐ「ありがとう」</span></div>
+    </div>
+  </section>
+
+  <!-- 1. 名簿の行 -->
+  <section>
+    <h2><span class="no">1</span>来た人の見方</h2>
+    <div class="screen">
+      <div class="row">
+        <div class="item call"><div class="fstate"><span class="fbtn plus">＋</span><span class="visit first">今日初</span></div>
+          <div class="av">🙂<span class="lv t2">Lv 24</span></div>
+          <div class="who"><div class="nm">ゆい🍓</div><div class="act">入場 · あと 25秒 <span class="fan">♥ 6</span></div></div></div>
+        <div class="say hot"><span class="star">最優先</span>金色の行＝いますぐ名前を呼ぶ人</div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="fstate"><span class="fbtn plus">＋</span><span class="visit first">今日初</span></div>
+          <div class="av">😊<span class="lv">Lv 8</span></div>
+          <div class="who"><div class="nm">takuma</div><div class="act">入場 · あと 18秒</div></div></div>
+        <div class="say hot">黄色の ＋＝未フォロー → フォローをお願い</div>
+      </div>
+      <div class="row">
+        <div class="item"><div class="fstate"><span class="fbtn check">✓</span><span class="visit">おかえり</span></div>
+          <div class="av">⭐<span class="lv">Lv 13</span></div>
+          <div class="who"><div class="nm">sora.</div><div class="act">コメント · あと 12秒 <span class="fan">♥ 3</span></div></div></div>
+        <div class="say">✓＝フォロー済み。おかえり＝また来てくれた人</div>
+      </div>
+    </div>
+    <p class="note">「あと○秒」が 0 になるとその行は消えます。コメント・ギフトをくれると、また数え直し。　行をクリック → その人の TikTok が開きます。</p>
+  </section>
+
+  <!-- 2. 上のボタン -->
+  <section>
+    <h2><span class="no">2</span>上のボタン</h2>
+    <div class="tabs"><span class="tab on">全部 <b>18</b></span><span class="tab">＋ 未フォロー <b>12</b></span>
+      <span class="vipg"><span>重点 Lv20+ <b>5</b></span><span>−</span><span>＋</span></span></div>
+    <div class="tabsay">
+      <div><b>全部</b>　いま出ている人みんな</div>
+      <div><b>＋ 未フォロー</b>　フォローしていない人だけ</div>
+      <div><b>重点</b>　レベルの高い人だけ（− ＋ でレベルを変える）</div>
+    </div>
+  </section>
+
+  <!-- 3. フォローしてくれたら -->
+  <section>
+    <h2><span class="no">3</span>フォローしてくれたら</h2>
+    <div class="flow">
+      <div class="step"><div class="mini"><div class="av">😊</div><div class="nm">takuma</div></div>左の名簿の行が…</div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="mini big">💖 ✓ フォロー中</div>画面いっぱいに大きく！</div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="mini pink"><div class="av">😊</div><div class="nm">takuma</div></div>右の「フォロー」欄に入る</div>
+    </div>
+    <p class="note">右の「💖 フォローありがとう！」欄＝今日フォローしてくれた人の一覧。</p>
+  </section>
+
+  <!-- 4. バッジ -->
+  <section>
+    <h2><span class="no">4</span>バッジの意味</h2>
+    <div class="legend">
+      <div class="chip"><span class="lv">Lv 1–19</span><b>ギフトのレベル</b></div>
+      <div class="chip"><span class="lv t2">Lv 20–39</span><b>よく応援してくれる人</b></div>
+      <div class="chip"><span class="lv t3">Lv 40+</span><b>大事な応援者 ★</b></div>
+      <div class="chip"><span class="fan">♥ 10</span><b>ファンクラブのレベル</b></div>
+    </div>
+  </section>
+
+  <!-- 5. ポップアップ -->
+  <section>
+    <h2><span class="no">5</span>画面いっぱいのポップアップ</h2>
+    <div class="pops">
+      <div class="pop follow"><div class="pav"><span>👤</span><i>💖</i></div><div class="pn">名前</div><div class="pact">✓ フォロー中</div><div class="what">フォロー → お礼</div></div>
+      <div class="pop box"><div class="pav"><span>👤</span><i>🎁</i></div><div class="pn">名前</div><div class="pact">🪙1,000</div><div class="what">宝箱 → お礼</div></div>
+      <div class="pop lvup"><div class="pav"><span>👤</span><i>🎉</i></div><div class="pn">名前</div><div class="up"><i>▲</i>Lv11</div><div class="what">ファンクラブ Lvアップ → おめでとう</div></div>
+    </div>
+  </section>
+
+  
+    <section>
+      <h2><span class="no">📝</span>文字だけのせつめい</h2>
+      <div class="textver">
+        <h3>配信中にやること（3つ）</h3>
+        <ul><li>金色の行 → いますぐ名前を呼ぶ</li><li>黄色の ＋ → 「よかったらフォローしてね」とお願い</li><li>ピンクのポップアップ → すぐ「フォローありがとう！」</li></ul>
+        <h3>名簿の見方</h3>
+        <ul><li>いちばん左：＋＝未フォロー、✓＝フォロー済み。下の小さい字は「今日初」（今日はじめて）か「おかえり」（また来てくれた）</li>
+          <li>頭像の下：ギフトのレベル（Lv）。20以上は白い細枠、40以上は太枠</li>
+          <li>名前の下：最近の行動（入場・コメント・ギフト）と、消えるまでの秒数。♥ 数字はファンクラブのレベル</li>
+          <li>行をクリックすると、その人の TikTok が開きます</li></ul>
+        <h3>上のボタン</h3>
+        <ul><li>全部＝いま出ている人みんな／＋ 未フォロー＝フォローしていない人だけ／重点＝決めたレベル以上の人だけ</li></ul>
+        <h3>フォローしてくれたら</h3>
+        <ul><li>その人の行が大きなポップアップになり、右の「フォロー」欄に移ります</li></ul>
+        <h3>ポップアップ</h3>
+        <ul><li>ピンク＝フォロー、金色＝宝箱、青紫＝ファンクラブのレベルアップ</li></ul>
+      </div>
+    </section>
+  </div>
+  <div class="panel" id="updates" hidden>
+  
+    <section>
+      <h2><span class="no">★</span>いちばん新しい変更</h2>
+      <div class="latest">
+        <div class="ver"><b>NEW</b>2026.10.17 の更新</div>
+        <div class="cmp">
+          <h4>名簿の 1 行がこう変わりました</h4>
+          <div class="side before"><span class="tag">前</span>
+            <div class="old"><div class="av">🙂</div><div style="min-width:0"><div class="nm2">ゆい🍓</div><div><span class="lvc">Lv24</span> <span class="fcc">💗LINK 6</span></div></div>
+              <div class="tg"><span class="t-n">🙋未フォロー</span><span class="t-f">今日初</span></div></div>
+            <div class="cap">フォローしているかは右のタグを読まないとわからない</div></div>
+          <div class="arrow2">→</div>
+          <div class="side after"><span class="tag">いま</span>
+            <div class="item"><div class="fstate"><span class="fbtn plus">＋</span><span class="visit first">今日初</span></div>
+              <div class="av">🙂<span class="lv t2">Lv 24</span></div>
+              <div class="who"><div class="nm">ゆい🍓</div><div class="act">入場 · あと 25秒 <span class="fan">♥ 6</span></div></div></div>
+            <div class="cap">左の黄色い ＋ で「未フォロー」がすぐわかる</div></div>
+        </div>
+        <ul class="points">
+          <li>いちばん左に <b>＋（未フォロー）</b> / <b>✓（フォロー済み）</b></li>
+          <li>レベルは頭像の下、ファンクラブは <b>♥ 数字</b></li>
+          <li>「あと○秒」が 0 になると消える（コメント・ギフトで数え直し）</li>
+          <li>フォローしてくれた人は、右の「💖 フォローありがとう！」欄へ移ります</li>
+          <li>金色の行＝いますぐ名前を呼ぶ人</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="no">📢</span>これまでの更新</h2>
+      <div class="hist" id="hist"><div class="hrow"><span class="nv">読み込み中…</span></div></div>
+    </section>
+  </div>
+</div>
+
+<script>
+// タブ（#rules / #updates）
+const tabs = document.querySelectorAll(".tabsbar button");
+function show(id) {
+  tabs.forEach(b => b.classList.toggle("on", b.dataset.p === id));
+  document.querySelectorAll(".panel").forEach(p => p.hidden = p.id !== id);
+  try { history.replaceState(null, "", "#" + id); } catch {}
+}
+tabs.forEach(b => b.addEventListener("click", () => { show(b.dataset.p); scrollTo(0, 0); }));
+show(location.hash === "#updates" ? "updates" : "rules");
+// これまでの更新（GitHub の公開データ）
+(async () => {
+  const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const box = document.getElementById("hist");
+  try {
+    const rels = await fetch("https://api.github.com/repos/soymilkkiller/liveboard-updates/releases?per_page=20").then(r => r.json());
+    const list = rels.filter(r => !r.draft && !r.prerelease);
+    box.innerHTML = list.map(r => {
+      const d = r.published_at ? new Date(r.published_at).toLocaleDateString("ja-JP", { month: "numeric", day: "numeric" }) : "";
+      const items = String(r.body || "更新").split(/[／\n]+/).map(x => x.trim()).filter(Boolean);
+      return `<div class="hrow"><span class="nv"><b>${esc(d)}</b>${esc((r.tag_name || "").replace(/^v/, ""))}</span><ul>${items.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
+    }).join("") || '<div class="hrow"><span class="nv">まだありません</span></div>';
+  } catch {
+    box.innerHTML = '<div class="hrow"><span class="nv">いまは読み込めません</span><ul><li>少しあとで開き直してください</li></ul></div>';
+  }
+})();
+</script>
+</body>
+</html>
