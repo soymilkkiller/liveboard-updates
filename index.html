@@ -64,6 +64,12 @@
   .vipg span { padding: 5px 11px; font-weight: 700; font-size: 14px; color: var(--sub); }
   .vipg span b { color: var(--text); margin-left: 4px; }
   .vipg span + span { border-left: 1px solid var(--line); color: var(--text); }
+  .vipg .numbox { font-style: normal; display: inline-block; min-width: 2.6em; text-align: center; background: rgba(255,255,255,.1);
+                  border: 1px solid rgba(255,255,255,.25); border-radius: 6px; padding: 0 .3em; font-weight: 900; }
+  /* 見出し（表示ページと同じ：小さく1行・右にいまつないでいるアカウント） */
+  .colhead { display: flex; align-items: center; gap: 10px; background: var(--panel); border-radius: 12px; padding: 8px 12px; font-weight: 800; font-size: 15px; }
+  .colhead .acct { font-size: 13px; color: var(--sub); background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; }
+  .colhead .acct::before { content: "●"; color: #ff4f4f; margin-right: 5px; }
   .tabsay { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-top: 10px; }
   .tabsay div { background: var(--panel); border-radius: 12px; padding: 10px 12px; font-weight: 700; font-size: 14px; }
   .tabsay b { font-family: var(--f-disp); }
@@ -230,12 +236,14 @@
   <!-- 2. 上のボタン -->
   <section>
     <h2><span class="no">2</span>上のボタン</h2>
+    <div class="colhead" style="margin-bottom:10px">👋 入場・フォロー表示 <span class="acct">@1tb.cross</span></div>
+    <p class="note" style="margin:0 4px 10px">見出しの右＝いまつないでいるアカウント（● 赤＝配信中、黄＝配信待ち）</p>
     <div class="tabs"><span class="tab on">全部 <b>18</b></span><span class="tab">＋ 未フォロー <b>12</b></span>
-      <span class="vipg"><span>重点 Lv20+ <b>5</b></span><span>−</span><span>＋</span></span></div>
+      <span class="vipg"><span>重点 <b>5</b></span><span>Lv <i class="numbox">20</i>+</span></span></div>
     <div class="tabsay">
       <div><b>全部</b>　いま出ている人みんな</div>
       <div><b>＋ 未フォロー</b>　フォローしていない人だけ</div>
-      <div><b>重点</b>　レベルの高い人だけ（− ＋ でレベルを変える）</div>
+      <div><b>重点</b>　Lv の数字（ここでは 20）以上の人だけ。数字はその場で入れて変えられます。金色の行もこの数字で決まります</div>
     </div>
   </section>
 
@@ -249,7 +257,7 @@
       <div class="arrow">→</div>
       <div class="step"><div class="mini pink"><div class="av">😊</div><div class="nm">takuma</div></div>右の「フォロー」欄に入る</div>
     </div>
-    <p class="note">右の「💖 フォローありがとう！」欄＝今日フォローしてくれた人の一覧。</p>
+    <p class="note">右の「💖 フォローありがとう！」欄＝フォローしてくれた人の一覧（初期はずっと残る。残す時間は設定で変えられます）。</p>
   </section>
 
   <!-- 4. バッジ -->
@@ -285,7 +293,7 @@
           <li>名前の下：最近の行動（入場・コメント・ギフト）と、消えるまでの秒数。♥ 数字はファンクラブのレベル</li>
           <li>行をクリックすると、その人の TikTok が開きます</li></ul>
         <h3>上のボタン</h3>
-        <ul><li>全部＝いま出ている人みんな／＋ 未フォロー＝フォローしていない人だけ／重点＝決めたレベル以上の人だけ</li></ul>
+        <ul><li>全部＝いま出ている人みんな／＋ 未フォロー＝フォローしていない人だけ／重点＝入れた Lv の数字以上の人だけ（金色の行もこの数字で決まる）</li></ul>
         <h3>フォローしてくれたら</h3>
         <ul><li>その人の行が大きなポップアップになり、右の「フォロー」欄に移ります</li></ul>
         <h3>ポップアップ</h3>
