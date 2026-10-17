@@ -30,7 +30,7 @@
   .row { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 14px; align-items: center; }
   .item { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 12px; background: var(--row); min-width: 0; }
   .item.call { background: rgba(255,200,40,.16); box-shadow: 0 0 0 2px var(--gold); }
-  .fstate { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; order: 2; margin-left: auto; }
+  .fstate { flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; }
   .fbtn { width: 42px; height: 42px; border-radius: 9px; display: grid; place-items: center; font-weight: 900; font-size: 24px; line-height: 1; }
   .fbtn.plus { background: var(--plus); color: #1b1400; }
   .fbtn.check { border: 2px solid #6b6b80; color: #b8b8c8; }
@@ -288,7 +288,7 @@
         <h3>配信中にやること（3つ）</h3>
         <ul><li>金色の行 → いますぐ名前を呼ぶ</li><li>黄色の ＋ → 「よかったらフォローしてね」とお願い</li><li>ピンクのポップアップ → すぐ「フォローありがとう！」</li></ul>
         <h3>名簿の見方</h3>
-        <ul><li>右はし：＋＝未フォロー、✓＝フォロー済み。下の小さい字は「今日初」（今日はじめて）か「おかえり」（また来てくれた）</li>
+        <ul><li>いちばん左：＋＝未フォロー、✓＝フォロー済み。下の小さい字は「今日初」（今日はじめて）か「おかえり」（また来てくれた）</li>
           <li>頭像の下：ギフトのレベル（Lv）。20以上は白い細枠、40以上は太枠</li>
           <li>名前の下：最近の行動（入場・コメント・ギフト）と、消えるまでの秒数。♥ 数字はファンクラブのレベル</li>
           <li>行をクリックすると、その人の TikTok が開きます</li></ul>
@@ -318,10 +318,10 @@
             <div class="item"><div class="fstate"><span class="fbtn plus">＋</span><span class="visit first">今日初</span></div>
               <div class="av">🙂<span class="lv t2">Lv 24</span></div>
               <div class="who"><div class="nm">ゆい🍓</div><div class="act">入場 · あと 25秒 <span class="fan">♥ 6</span></div></div></div>
-            <div class="cap">右はしの黄色い ＋ で「未フォロー」がすぐわかる</div></div>
+            <div class="cap">左の黄色い ＋ で「未フォロー」がすぐわかる</div></div>
         </div>
         <ul class="points">
-          <li><b>画面をシンプルに、見やすくしました</b>（右はしの ＋/✓ でフォローしているかがすぐわかる・レベルは頭像の下・ファンクラブは ♥ 数字）</li>
+          <li><b>画面をシンプルに、見やすくしました</b>（左の ＋/✓ でフォローしているかがすぐわかる・レベルは頭像の下・ファンクラブは ♥ 数字）</li>
           <li><b>観客の行をクリック → その人の TikTok のページが開きます</b></li>
           <li><b>「重点」にするレベルを自由に決められます</b>（初期は Lv20 以上）。重点のレベル以上の人は、フォローしていてもいなくても行が<b>金色</b>で目立ちます</li>
           <li><b>音は最初オフ</b>。自分でオンにすると覚えていて、次からもオンのままです</li>
