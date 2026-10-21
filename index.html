@@ -222,7 +222,7 @@
     <button data-p="obs">② OBS動画素材</button>
     <button data-p="updates">③ 最近の更新<span class="dot"></span></button>
   </div>
-  <div class="panel" id="rules">
+  <div class="panel" id="p-rules">
   <!-- 0. これだけ覚える -->
   <section>
     <div class="three">
@@ -325,7 +325,7 @@
       </div>
     </section>
   </div>
-  <div class="panel" id="obs" hidden>
+  <div class="panel" id="p-obs" hidden>
     <!-- MC 向け：OBS動画素材（顶部 banner・入場アニメ）。MC はほとんど何もしなくていい、をいちばんに伝える -->
     <section>
       <div class="three">
@@ -353,13 +353,14 @@
     </section>
 
     <section>
-      <h2><span class="no">2</span>MC がやること（最初の 1 回だけ）</h2>
+      <h2><span class="no">2</span>OBS の設定（陳さんがやります）</h2>
       <ul class="obsl">
-        <li><b>OBS にリンクを 2 本貼る</b>だけ。貼るのはスタッフが一緒にやります（自分で触らなくて大丈夫）
-          <div class="links"><code>http://localhost:8765/overlay/top</code><span>顶部 banner（下の層）</span></div>
-          <div class="links"><code>http://localhost:8765/overlay/entrance</code><span>入場アニメ（いちばん上の層）</span></div>
+        <li><b>この設定は陳さんが各団のパソコンでやります。MC は何もしなくて大丈夫です</b></li>
+        <li>陳さんが OBS にソースを 2 つ入れて、<b>どの団も同じ名前</b>にそろえます
+          <div class="links"><code>TOP</code><span>顶部 banner（下の層）</span></div>
+          <div class="links"><code>入場</code><span>入場アニメ（いちばん上の層）</span></div>
         </li>
-        <li>一度貼れば、<b>あとはずっとそのまま</b>。素材が変わってもリンクは変わりません</li>
+        <li><b>「TOP」「入場」の 2 つは消したり、名前を変えたりしないでください</b>。素材が変わってもこの 2 つはそのままで、中身だけ自動で入れ替わります</li>
         <li>🏠 ホーム の「⏰ 1日の区切り」が自分の団の配信時間に合っているかだけ、確認してください</li>
       </ul>
     </section>
@@ -383,7 +384,7 @@
       </ul>
     </section>
   </div>
-  <div class="panel" id="updates" hidden>
+  <div class="panel" id="p-updates" hidden>
   
     <section>
       <h2><span class="no">★</span>いちばん新しい変更</h2>
@@ -439,11 +440,16 @@
 const tabs = document.querySelectorAll(".tabsbar button");
 function show(id) {
   tabs.forEach(b => b.classList.toggle("on", b.dataset.p === id));
-  document.querySelectorAll(".panel").forEach(p => p.hidden = p.id !== id);
+  document.querySelectorAll(".panel").forEach(p => p.hidden = p.id !== "p-" + id);   // 中身の id は p-○○（URL の #○○ と同じにすると、開いたとき真ん中へ飛んでしまう）
   try { history.replaceState(null, "", "#" + id); } catch {}
 }
 tabs.forEach(b => b.addEventListener("click", () => { show(b.dataset.p); scrollTo(0, 0); }));
 show(["#updates", "#obs"].includes(location.hash) ? location.hash.slice(1) : "rules");
+// URL の #rules / #obs はタブの名前。ブラウザが同じ id の場所（タブの中身）へ勝手に飛んで
+// 真ん中から表示されてしまうので、開いたときは必ずいちばん上から見せる
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+scrollTo(0, 0);
+addEventListener("load", () => scrollTo(0, 0));
 // これまでの更新（GitHub の公開データ）
 (async () => {
   const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
