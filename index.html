@@ -168,7 +168,7 @@
 
 <style>
   /* タブ */
-  .tabsbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; display: flex; gap: 8px; }
+  .tabsbar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .tabsbar button { flex: 1; font-family: var(--f-disp); font-weight: 800; font-size: 17px; padding: 12px 10px; border-radius: 14px;
                     border: 1px solid var(--line); background: var(--panel); color: var(--sub); cursor: pointer; }
   .tabsbar button.on { background: var(--text); color: var(--bg); border-color: var(--text); }
@@ -253,7 +253,9 @@
     <button data-p="rules">① ルール</button>
     <button data-p="obs">② OBS動画素材</button>
     <button data-p="kento">③ KENTO カード</button>
-    <button data-p="updates">④ 最近の更新<span class="dot"></span></button>
+    <button data-p="fans">④ ファンクラブ名簿</button>
+    <button data-p="cache">⑤ キャッシュ掃除</button>
+    <button data-p="updates">⑥ 最近の更新<span class="dot"></span></button>
   </div>
   <div class="panel" id="p-rules">
   <!-- 0. これだけ覚える -->
@@ -484,35 +486,109 @@
       <p class="note">このゲームは KENTO 先生が考案しました。</p>
     </section>
   </div>
+  <div class="panel" id="p-fans" hidden>
+    <!-- ファンクラブ名簿：配信中に自動でたまる。MC はコピー・書き出しだけ -->
+    <section>
+      <div class="three">
+        <div class="t ob1"><span class="ic">🤖</span><b>配信中は</b><span>自動で記録</span></div>
+        <div class="t ob3"><span class="ic">📋</span><b>レベルで絞って</b><span>名前をコピー</span></div>
+        <div class="t ob2"><span class="ic">⬇</span><b>Excel で開ける</b><span>表に書き出し</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="no">1</span>どこにある？</h2>
+      <div class="krule">左のメニュー「👋 入場・フォロー表示」→ 下の方の「👑 ファンクラブ名簿」
+        <small>LIVE BRIDGE で配信につないでいれば、来たファンクラブの人がレベル付きで自動でたまります。MC は何もしなくて大丈夫です</small></div>
+    </section>
+
+    <section>
+      <h2><span class="no">2</span>使い方</h2>
+      <ol class="ksteps">
+        <li><b>見たい日を選ぶ</b>
+          <small>「今日来た人」＝今日の配信に来た人（もう帰った人も入ります）／「これまで全員」＝記録を始めてからの全員</small></li>
+        <li><b>レベルで絞る</b>（しなくても OK）
+          <small>「Lv50」「Lv45–47」などの区切りを押す（いくつでも選べます）。「Lv 下限〜上限」に数字を入れると、その範囲も出ます。「全レベル」で元に戻ります</small></li>
+        <li><b>「📋 表示中の名前をコピー」</b>
+          <small>いま表に出ている人の名前が、1人1行でコピーされます。LINE やメモにそのまま貼れます</small></li>
+        <li><b>「⬇ 表に書き出す（CSV）」</b>
+          <small>Excel で開ける表になります。Lv・@ID・ユーザー名・前の @ID・備考・来た日数などが入っています</small></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2><span class="no">3</span>知っておくこと</h2>
+      <div class="kfaq">
+        <div><b>人数は「いま配信にいる人数」ではありません</b>その日（または、これまで）に来たファンクラブの人の合計です。いまの人数は上の「視聴者」を見てください</div>
+        <div><b>レベルはいちばん新しいものだけ</b>ファンクラブのレベルは下がりません（切れても 1 コインのハートミーで戻ります）。だから最新のレベルだけを記録します。配信中にレベルアップすると、数秒で表も変わり「UP」が付きます</div>
+        <div><b>備考「@ID を変えた人かも」</b>初めて見る人なのに、もうレベルが高い人です。@ID を変えた人かもしれません。同じ人が @ID を変えたと分かったときは「@ID 変更：@前 → @今」と出ます</div>
+        <div><b>入るのは TikTok から知らせが来た人だけ</b>入場・コメント・ギフト・いいねで見えた人です。何もしないで見ているだけの人は、入らないことがあります</div>
+        <div><b>見られるのは、いまつないでいる団の分だけ</b>パソコンの負担はほとんどありません（重くなりません）</div>
+      </div>
+    </section>
+  </div>
+  <div class="panel" id="p-cache" hidden>
+    <!-- キャッシュ掃除：起動のたびに自動。カクつくときだけ手動 -->
+    <section>
+      <div class="three">
+        <div class="t ob1"><span class="ic">🔄</span><b>起動したら</b><span>自動で掃除</span></div>
+        <div class="t ob3"><span class="ic">🧹</span><b>カクつくときは</b><span>手で掃除</span></div>
+        <div class="t ob2"><span class="ic">🙆</span><b>配信中の OBS には</b><span>触りません</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="no">1</span>なにを消すの？</h2>
+      <div class="krule">OBS のブラウザソースと TikTok LIVE Studio の一時ファイル（キャッシュ）
+        <small>たまると配信がカクついたり、重くなったりします。ログイン・設定・シーンは消えません</small></div>
+    </section>
+
+    <section>
+      <h2><span class="no">2</span>自動の掃除</h2>
+      <div class="kfaq">
+        <div><b>LIVE BRIDGE を起動するたびに、自動で掃除します（はじめから ON）</b>「🏠 ホーム」→「🧹 キャッシュ掃除」の「LIVE BRIDGE を起動したら自動で掃除する」で ON／OFF できます</div>
+        <div><b>そのとき開いているアプリは飛ばします</b>配信中に LIVE BRIDGE を起動し直しても、OBS には触りません。結果はその下に「今回の起動時（12:03）：… 消しました」と出ます</div>
+        <div><b>おすすめの順番</b>パソコンをつける → LIVE BRIDGE が起動（ここで掃除）→ OBS・LIVE Studio を開く</div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="no">3</span>手で掃除する（カクつくとき）</h2>
+      <ol class="ksteps">
+        <li><b>OBS と TikTok LIVE Studio を閉じる</b>
+          <small>開いていると消せません。「● 起動中」と出ているときは、閉じてから「🔍 もう一度確認」</small></li>
+        <li><b>「🏠 ホーム」→「🧹 キャッシュ掃除」で「🧹 掃除する」を押す</b>
+          <small>OBS と LIVE Studio は別々のボタンです。右の数字が、いまたまっている量です</small></li>
+        <li><b>「✓ ○○ MB 消しました」と出たら完了</b>
+          <small>OBS・LIVE Studio を開き直してください</small></li>
+      </ol>
+    </section>
+  </div>
   <div class="panel" id="p-updates" hidden>
   
     <section>
       <h2><span class="no">★</span>いちばん新しい変更</h2>
       <div class="latest">
-        <div class="ver"><b>NEW</b>2026.10.28 の更新</div>
-        <h3 style="margin:0 0 6px">🃏 KENTO カード（新しいゲーム）</h3>
+        <div class="ver"><b>NEW</b>2026.10.31 の更新</div>
+        <h3 style="margin:0 0 6px">👑 ファンクラブ名簿</h3>
         <div class="cmp">
           <div class="side before"><span class="tag">前</span>
-            <div class="cap">配信でカードのゲームをするには、別のソフトを立ち上げて、
-              同じ Wi-Fi のパソコンからしか操作できませんでした。</div></div>
+            <div class="cap">来たファンクラブの人を知りたいときは、配信を見ながら手で書き出すしかありませんでした。</div></div>
           <div class="arrow2">→</div>
           <div class="side after"><span class="tag">いま</span>
-            <div class="cap">LIVE BRIDGE の中で、そのまま遊べます。
-              <b>OBS にはリンクを 1 本貼るだけです。</b></div></div>
+            <div class="cap">配信中に来たファンクラブの人が、レベル付きで自動でたまります。
+              <b>レベルで絞って、名前をコピー・表に書き出しができます。</b></div></div>
         </div>
         <ul class="points">
-          <li><b>左のメニュー「🃏 KENTO カード」から使えます</b>（KENTO 先生が考案したゲームです）。ルールと操作は上の「③ KENTO カード」</li>
-          <li><b>挑戦者が自分のカードを引けば「覚醒」</b>。カードが大きく出て、虹色に光ります</li>
-          <li><b>出たカードは、MC が画面で動かすと、配信のカードも同じように傾きます</b>。
-            「📸 カードだけにする」で、点数や名前を隠してスクショも撮れます</li>
-          <li><b>人物・カードの絵・点数は団ごと</b>。運営が用意した物が自動で届きます
-            （届かないときは右上の「⬇ 素材を更新」）</li>
+          <li><b>「👋 入場・フォロー表示」の下の方「👑 ファンクラブ名簿」</b>。使い方は上の「④ ファンクラブ名簿」</li>
+          <li><b>「今日来た人」「これまで全員」</b>を選べます。帰った人も入ります</li>
+          <li><b>レベルアップすると数秒で表も変わります</b>。@ID を変えたかもしれない人には備考が付きます</li>
         </ul>
 
-        <h3 style="margin:14px 0 6px">■ MC のみなさんへ お願い</h3>
+        <h3 style="margin:14px 0 6px">🧹 キャッシュ掃除</h3>
         <ul class="points">
-          <li><b>OBS へのリンクの追加は、陳さんが来てから一緒に設定してテストします。</b>
-            それまでは触らなくて大丈夫です</li>
+          <li><b>LIVE BRIDGE を起動するたびに、OBS・LIVE Studio のキャッシュを自動で掃除します</b>（開いているアプリは飛ばします）</li>
+          <li><b>カクつくときは「🏠 ホーム」→「🧹 キャッシュ掃除」で手でも掃除できます</b>。使い方は上の「⑤ キャッシュ掃除」</li>
         </ul>
       </div>
     </section>
@@ -533,7 +609,7 @@ function show(id) {
   try { history.replaceState(null, "", "#" + id); } catch {}
 }
 tabs.forEach(b => b.addEventListener("click", () => { show(b.dataset.p); scrollTo(0, 0); }));
-show(["#updates", "#obs", "#kento"].includes(location.hash) ? location.hash.slice(1) : "rules");
+show(["#updates", "#obs", "#kento", "#fans", "#cache"].includes(location.hash) ? location.hash.slice(1) : "rules");
 // URL の #rules / #obs はタブの名前。ブラウザが同じ id の場所（タブの中身）へ勝手に飛んで
 // 真ん中から表示されてしまうので、開いたときは必ずいちばん上から見せる
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
